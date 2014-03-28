@@ -702,7 +702,7 @@ namespace hpx
         class future;
 #elif defined(HPX_UNIQUE_FUTURE_ALIAS)
         template <typename Result>
-        using future = unique_future<Result>
+        using future = unique_future<Result>;
 #endif
 
         template <typename ValueType>
