@@ -191,6 +191,7 @@ struct HPX_EXPORT response
     }
 
   private:
+    friend class cereal::access;
     friend class boost::serialization::access;
 
     void save(
@@ -203,7 +204,7 @@ struct HPX_EXPORT response
       , const unsigned int
         );
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    //BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     namespace_action_code mc;
     error status;

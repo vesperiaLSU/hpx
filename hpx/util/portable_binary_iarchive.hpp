@@ -8,6 +8,12 @@
 #include <boost/type_traits/is_unsigned.hpp>
 #include <boost/type_traits/is_integral.hpp>
 
+#if 1
+
+#include <hpx/util/portable_binary_oarchive.hpp>
+
+#else
+
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
@@ -444,6 +450,8 @@ namespace boost { namespace archive { namespace detail
 
 #if defined(_MSC_VER)
 #pragma warning( pop )
+#endif
+
 #endif
 
 #endif // PORTABLE_BINARY_IARCHIVE_HPP

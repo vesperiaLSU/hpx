@@ -189,6 +189,7 @@ namespace hpx { namespace performance_counters
     protected:
         // serialization support
         friend class boost::serialization::access;
+        friend class cereal::access;
 
         template<class Archive>
         void serialize(Archive& ar, const unsigned int)
@@ -236,6 +237,7 @@ namespace hpx { namespace performance_counters
     private:
         // serialization support
         friend class boost::serialization::access;
+        friend class cereal::access;
 
         template<class Archive>
         void serialize(Archive& ar, const unsigned int)
@@ -334,6 +336,7 @@ namespace hpx { namespace performance_counters
     private:
         // serialization support
         friend class boost::serialization::access;
+        friend class cereal::access;
 
         template<class Archive>
         void serialize(Archive& ar, const unsigned int)
@@ -431,6 +434,7 @@ namespace hpx { namespace performance_counters
     private:
         // serialization support
         friend class boost::serialization::access;
+        friend class cereal::access;
 
         template<class Archive>
         void serialize(Archive& ar, const unsigned int)

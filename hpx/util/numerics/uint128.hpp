@@ -116,8 +116,9 @@ namespace hpx { namespace util { namespace numerics
 
     private:
         friend class boost::serialization::access;
+        friend class cereal::access;
 
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
+        //BOOST_SERIALIZATION_SPLIT_MEMBER()
 
         template <typename Archive>
         void save(Archive& ar, const unsigned int version) const;

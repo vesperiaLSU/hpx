@@ -470,7 +470,8 @@ namespace hpx { namespace traits
 }}
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace serialization
+//namespace boost { namespace serialization
+namespace cereal
 {
     // serialization of the bound object
     template <typename F, typename BoundArgs>
@@ -480,7 +481,8 @@ namespace boost { namespace serialization
       , unsigned int const /*version*/)
     {
         ar >> bound._f;
-        ar >> bound._bound_args;
+        //ar >> bound._bound_args;
+        serialize_sequence(ar, bound._bound_args);
     }
 
     template <typename F, typename BoundArgs>
@@ -490,7 +492,8 @@ namespace boost { namespace serialization
       , unsigned int const /*version*/)
     {
         ar << bound._f;
-        ar << bound._bound_args;
+        //ar << bound._bound_args;
+        serialize_sequence(ar, bound._bound_args);
     }
 
     // serialization of the bound object
@@ -528,7 +531,7 @@ namespace boost { namespace serialization
       , ::hpx::util::detail::placeholder<I>& bound
       , unsigned int const /*version*/)
     {}
-}}
+}//}
 
 #   if !defined(HPX_USE_PREPROCESSOR_LIMIT_EXPANSION)
 #       include <hpx/util/preprocessed/bind.hpp>

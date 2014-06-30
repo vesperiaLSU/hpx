@@ -22,7 +22,9 @@
         ::boost::serialization::track_never)                                  \
     /**/
 
-namespace boost { namespace serialization
+#if 0
+//namespace boost { namespace serialization
+namespace cereal
 {
     template <typename Archive, typename T>
     BOOST_FORCEINLINE void save(Archive& ar, boost::intrusive_ptr<T> const& t,
@@ -31,9 +33,11 @@ namespace boost { namespace serialization
         // The most common cause of trapping here would be serializing
         // something like intrusive_ptr<int>.  This occurs because int
         // is never tracked by default.  Wrap int in a trackable type
-        BOOST_STATIC_ASSERT((tracking_level<T>::value != track_never));
+        /*
+        BOOST_STATIC_ASSERT((boost::serialization::tracking_level<T>::value != boost::serialization::track_never));
         T const* ptr = t.get();
-        ar << ptr;
+        ar << *ptr;
+        */
     }
 
     template <typename Archive, typename T>
@@ -43,21 +47,27 @@ namespace boost { namespace serialization
         // The most common cause of trapping here would be serializing
         // something like intrusive_ptr<int>.  This occurs because int
         // is never tracked by default.  Wrap int in a trackable type
-        BOOST_STATIC_ASSERT((tracking_level<T>::value != track_never));
-        T* ptr;
+        /*
+        BOOST_STATIC_ASSERT((boost::serialization::tracking_level<T>::value != boost::serialization::track_never));
+        T ptr;
         ar >> ptr;
-        t.reset(ptr);
+        t.reset(new T(ptr));
+        */
     }
 
+    /*
     template <typename Archive, typename T>
     BOOST_FORCEINLINE void serialize(Archive& ar, boost::intrusive_ptr<T>& t,
         unsigned int const version)
     {
         // correct intrusive_ptr serialization depends upon object tracking
         // being used.
-        BOOST_STATIC_ASSERT(tracking_level<T>::value != track_never);
+        BOOST_STATIC_ASSERT(boost::serialization::tracking_level<T>::value != track_never);
         boost::serialization::split_free(ar, t, version);
     }
-}}
+    */
+}//}
+
+#endif
 
 #endif // HPX_UTIL_SERIALIZE_INTRUSIVE_PTR_FEB_20_2012_1137AM

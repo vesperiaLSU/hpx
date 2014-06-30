@@ -1543,6 +1543,7 @@ namespace hpx { namespace actions
             return detail::get_continuation_name<typed_continuation>();
         }
 
+    public:
         /// serialization support
         void load(hpx::util::portable_binary_iarchive& ar)
         {
@@ -1568,7 +1569,7 @@ namespace hpx { namespace actions
             if (have_function)
                 ar << f_;
         }
-
+    private:
         util::function<void(naming::id_type)> f_;
     };
 
@@ -1649,6 +1650,7 @@ namespace hpx { namespace actions
             return detail::get_continuation_name<typed_continuation>();
         }
 
+    public:
         /// serialization support
         void load(hpx::util::portable_binary_iarchive& ar)
         {
@@ -1674,7 +1676,7 @@ namespace hpx { namespace actions
             if (have_function)
                 ar << f_;
         }
-
+    private:
         util::function<void(naming::id_type, R)> f_;
     };
 
@@ -1756,7 +1758,7 @@ namespace hpx { namespace actions
         {
             return detail::get_continuation_name<typed_continuation>();
         }
-
+    public:
         /// serialization support
         void load(hpx::util::portable_binary_iarchive& ar)
         {
@@ -1782,12 +1784,13 @@ namespace hpx { namespace actions
             if (have_function)
                 ar << f_;
         }
-
+    private:
         util::function<void(naming::id_type)> f_;
     };
 }}
 
-namespace boost { namespace serialization
+//namespace boost { namespace serialization
+namespace cereal
 {
     template <typename Archive, typename T>
     BOOST_FORCEINLINE
@@ -1802,7 +1805,7 @@ namespace boost { namespace serialization
     {
         hpx::lcos::detail::serialize_future(ar, f, version);
     }
-}}
+}//}
 
 #include <hpx/lcos/local/packaged_continuation.hpp>
 

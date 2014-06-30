@@ -211,7 +211,7 @@ namespace hpx { namespace util
         using base_type::target_type;
         using base_type::target;
 
-    private:
+    //private:
         friend class boost::serialization::access;
 
         void load(IArchive& ar, const unsigned version)
@@ -243,7 +243,7 @@ namespace hpx { namespace util
             }
         }
 
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
+        //BOOST_SERIALIZATION_SPLIT_MEMBER()
     };
 
     ///////////////////////////////////////////////////////////////////////////

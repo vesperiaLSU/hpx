@@ -21,7 +21,8 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace serialization
+//namespace boost { namespace serialization
+namespace cereal
 {
     ///////////////////////////////////////////////////////////////////////////
     // TODO: This is not scalable, and painful to update.
@@ -375,5 +376,5 @@ namespace boost { namespace serialization
     template HPX_EXPORT void
     load(hpx::util::portable_binary_iarchive&, boost::exception_ptr&,
         unsigned int);
-}}
+}//}
 

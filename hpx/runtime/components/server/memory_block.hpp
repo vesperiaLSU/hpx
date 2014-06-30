@@ -272,6 +272,7 @@ namespace hpx { namespace components
         ///       such things as endianess, alignment, and data type sizes are
         ///       not considered.
         friend class boost::serialization::access;
+        friend class cereal::access;
 
         ///////////////////////////////////////////////////////////////////////
         template <class Archive>
@@ -287,7 +288,7 @@ namespace hpx { namespace components
             HPX_ASSERT(act);
 
             ar << size; //-V128
-            ar << act;
+            //ar << act;
 
             HPX_ASSERT(act->save());
             if (config) {
@@ -319,7 +320,7 @@ namespace hpx { namespace components
             actions::manage_object_action_base* act = 0;
 
             ar >> size; //-V128
-            ar >> act;
+            //ar >> act;
 
             typedef server::detail::memory_block_header alloc_type;
             alloc_type* p =
@@ -349,7 +350,7 @@ namespace hpx { namespace components
                 config_.reset(load_(ar, version));
             data_.reset(load_(ar, version, config_.get()));
         }
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
+        //BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     private:
         boost::intrusive_ptr<server::detail::memory_block_header> data_;

@@ -47,6 +47,7 @@ namespace hpx { namespace util
 
     private:
         friend class boost::serialization::access;
+        friend class cereal::access;
 
         template <typename Archive>
         void save(Archive& ar, const unsigned int version) const;
@@ -54,7 +55,7 @@ namespace hpx { namespace util
         template <typename Archive>
         void load(Archive& ar, const unsigned int version);
 
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
+        //BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     protected:
         bool regex_init();

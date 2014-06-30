@@ -39,7 +39,8 @@ namespace hpx { namespace util
             template <typename Archive, typename Element>
             static void serialize_element(Archive & ar, Element & e, boost::mpl::true_)
             {
-                ar & boost::serialization::make_array(&e, 1);;
+                ar(cereal::binary_data(&e, 1));
+                //ar & boost::serialization::make_array(&e, 1);;
             }
 
             template <typename Archive, typename Element>
@@ -121,7 +122,8 @@ namespace hpx { namespace util
         inline void
         serialize_sequence(Archive& ar, Sequence& seq, boost::mpl::true_)
         {
-            ar & boost::serialization::make_array(&seq, 1);
+            ar(cereal::binary_data(&seq, 1));
+            //ar & boost::serialization::make_array(&seq, 1);
         }
     }
 

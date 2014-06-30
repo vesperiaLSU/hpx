@@ -358,7 +358,7 @@ namespace hpx { namespace util
     template <typename Tuple>
     struct tuple_decay
     {};
-    
+
 #   define HPX_TUPLE_DECAY_ELEM(Z, N, D)                                      \
     typename decay<BOOST_PP_CAT(T, N)>::type                                  \
     /**/
@@ -366,7 +366,7 @@ namespace hpx { namespace util
     struct tuple_decay<tuple<BOOST_PP_ENUM_PARAMS(N, T)> >
     {
         typedef tuple<BOOST_PP_ENUM(N, HPX_TUPLE_DECAY_ELEM, _)> type;
-    };    
+    };
 #undef HPX_TUPLE_DECAY_ELEM
 
     // 20.4.2.6, element access
@@ -823,8 +823,7 @@ namespace hpx { namespace util
 
 #include <hpx/util/detail/fusion_adapt_tuple.hpp>
 
-namespace boost { namespace serialization
-{
+namespace boost { namespace serialization {
     ///////////////////////////////////////////////////////////////////////////
     namespace detail
     {
@@ -850,6 +849,9 @@ namespace boost { namespace serialization
         >
     {};
 #   undef HPX_UTIL_TUPLE_IS_BITWISE_SERIALIZABLE
+}}
+namespace cereal
+{
 
     ///////////////////////////////////////////////////////////////////////////
     template <typename Archive, BOOST_PP_ENUM_PARAMS(N, typename T)>
@@ -862,7 +864,7 @@ namespace boost { namespace serialization
     {
         ::hpx::util::serialize_sequence(ar, t);
     }
-}}
+}//}
 
 #undef N
 

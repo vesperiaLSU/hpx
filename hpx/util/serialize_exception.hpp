@@ -47,7 +47,8 @@ namespace hpx { namespace util
 }}  // namespace hpx::util
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace serialization
+//namespace boost { namespace serialization
+namespace cereal
 {
     ///////////////////////////////////////////////////////////////////////////
     template <typename Archive>
@@ -56,8 +57,8 @@ namespace boost { namespace serialization
     ///////////////////////////////////////////////////////////////////////////
     template <typename Archive>
     void load(Archive& ar, boost::exception_ptr& e, unsigned int);
-}}
+}//}
 
-BOOST_SERIALIZATION_SPLIT_FREE(boost::exception_ptr)
+//BOOST_SERIALIZATION_SPLIT_FREE(boost::exception_ptr)
 
 #endif

@@ -228,7 +228,7 @@ struct HPX_EXPORT request
 
   private:
     friend class boost::serialization::access;
-
+    friend class cereal::access;
 
     void save(
         hpx::util::portable_binary_oarchive& ar
@@ -240,7 +240,7 @@ struct HPX_EXPORT request
       , const unsigned int
         );
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    //BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     namespace_action_code mc;
     boost::shared_ptr<request_data> data;

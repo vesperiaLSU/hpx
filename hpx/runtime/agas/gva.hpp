@@ -152,7 +152,8 @@ struct gva
     boost::uint64_t offset;
 
   private:
-    friend class boost::serialization::access;
+    //friend class boost::serialization::access;
+    friend class cereal::access;
 
     template<class Archive>
     void save(Archive& ar, const unsigned int version) const
@@ -168,7 +169,7 @@ struct gva
         ar >> endpoint >> type >> count >> lva_ >> offset;
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    //BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
 
 template <typename Char, typename Traits>

@@ -203,6 +203,7 @@ namespace hpx { namespace util
     private:
         // serialization support
         friend class boost::serialization::access;
+          friend class cereal::access;
 
         ///////////////////////////////////////////////////////////////////////
         template <typename Archive>
@@ -232,8 +233,8 @@ namespace hpx { namespace util
         {
             if (size_ != 0)
             {
-                boost::serialization::array<T> arr(data_.get(), size_);
-                ar.save_array(arr, version);
+                //boost::serialization::array<T> arr(data_.get(), size_);
+                ar.saveBinary(data_.get(), size_);
             }
         }
 
@@ -270,12 +271,15 @@ namespace hpx { namespace util
         {
             if (size_ != 0)
             {
+              /*
                 boost::serialization::array<T> arr(data_.get(), size_);
                 ar.load_array(arr, version);
+                */
+                ar.loadBinary(data_.get(), size_);
             }
         }
 
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
+        //BOOST_SERIALIZATION_SPLIT_MEMBER()
 
         // this is needed for util::any
         friend bool
@@ -397,6 +401,7 @@ namespace hpx { namespace util
     private:
         // serialization support
         friend class boost::serialization::access;
+        friend class cereal::access;
 
         ///////////////////////////////////////////////////////////////////////
         template <typename Archive>
@@ -426,8 +431,11 @@ namespace hpx { namespace util
         {
             if (size_ != 0)
             {
+              /*
                 boost::serialization::array<T> arr(data_.get(), size_);
                 ar.save_array(arr, version);
+              */
+              ar.saveBinary(data_.get(), size_);
             }
         }
 
@@ -460,12 +468,15 @@ namespace hpx { namespace util
         {
             if (size_ != 0)
             {
+              /*
                 boost::serialization::array<T> arr(data_.get(), size_);
                 ar.load_array(arr, version);
+              */
+              ar.loadBinary(data_.get(), size_);
             }
         }
 
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
+        //BOOST_SERIALIZATION_SPLIT_MEMBER()
 
         // this is needed for util::any
         friend bool

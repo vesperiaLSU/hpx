@@ -149,7 +149,8 @@ namespace hpx { namespace parcelset
                 return action_->get_message_handler(ph, loc, t, p);
             }
 
-        protected:
+        //protected:
+        public:
             void save(util::portable_binary_oarchive& ar, bool has_source_id, bool has_continuation) const;
 
             void load(util::portable_binary_iarchive& ar, bool has_source_id, bool has_continuation);
@@ -733,11 +734,12 @@ namespace hpx { namespace parcelset
         // serialization support
         friend class boost::serialization::access;
 
+    public:
         void save(util::portable_binary_oarchive& ar, const unsigned int version) const;
 
         void load(util::portable_binary_iarchive& ar, const unsigned int version);
 
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
+        //BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     private:
         boost::intrusive_ptr<detail::parcel_data> data_;

@@ -8,6 +8,252 @@
 #include <boost/type_traits/is_unsigned.hpp>
 #include <boost/type_traits/is_integral.hpp>
 
+#if 1
+
+#include <cereal/cereal.hpp>
+#include <cereal/types/array.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/map.hpp>
+
+#include <hpx/util/portable_binary_archive.hpp>
+#include <hpx/util/basic_binary_oprimitive.hpp>
+#include <hpx/util/basic_binary_iprimitive.hpp>
+
+#include <boost/archive/archive_exception.hpp>
+#include <hpx/util/serialize_sequence.hpp>
+
+namespace hpx { namespace util {
+  /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
+  // exception to be thrown if integer read from archive doesn't fit
+  // variable being loaded
+  class portable_binary_oarchive_exception :
+      public virtual boost::archive::archive_exception
+  {
+  public:
+      enum exception_code {
+          invalid_flags
+      };
+      portable_binary_oarchive_exception(exception_code c = invalid_flags)
+        : boost::archive::archive_exception(
+            static_cast<boost::archive::archive_exception::exception_code>(c))
+      {}
+      virtual const char *what() const throw()
+      {
+          const char *msg = "programmer error";
+          switch (static_cast<exception_code>(code)) {
+          case invalid_flags:
+              msg = "cannot be both big and little endian";
+          default:
+              boost::archive::archive_exception::what();
+          }
+          return msg;
+      }
+  };
+
+  /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
+  // exception to be thrown if integer read from archive doesn't fit
+  // variable being loaded
+  class portable_binary_iarchive_exception :
+      public virtual boost::archive::archive_exception
+  {
+  public:
+      enum exception_code {
+          incompatible_integer_size
+      };
+      portable_binary_iarchive_exception(exception_code c = incompatible_integer_size )
+        : boost::archive::archive_exception(
+              static_cast<boost::archive::archive_exception::exception_code>(c))
+      {}
+      virtual const char *what() const throw()
+      {
+          const char *msg = "programmer error";
+          switch (static_cast<exception_code>(code)) {
+          case incompatible_integer_size:
+              msg = "integer cannot be represented";
+          default:
+              boost::archive::archive_exception::what();
+          }
+          return msg;
+      }
+  };
+  class portable_binary_oarchive
+    : public cereal::OutputArchive<portable_binary_oarchive, cereal::AllowEmptyClassElision>
+  {
+      typedef
+        cereal::OutputArchive<portable_binary_oarchive, cereal::AllowEmptyClassElision>
+        base_type;
+
+  public:
+      portable_binary_oarchive(std::vector<char> & data, binary_filter* filter = 0,
+              unsigned flags_value = 0)
+        : base_type(this)
+        , index_(0)
+        , data_(data)
+      {}
+
+      template <typename Container>
+      portable_binary_oarchive(Container& buffer,
+              boost::uint32_t dest_locality_id,
+              binary_filter* filter = 0, unsigned flags_value = 0)
+        : base_type(this)
+        , index_(0)
+        , data_(buffer)
+      {
+      }
+
+      template <typename Container>
+      portable_binary_oarchive(Container& buffer,
+              std::vector<serialization_chunk>* chunks,
+              boost::uint32_t dest_locality_id,
+              binary_filter* filter = 0, unsigned flags_value = 0)
+        : base_type(this)
+        , index_(0)
+        , data_(buffer)
+      {
+      }
+
+      void saveBinary(const void * data, std::size_t size)
+      {
+          while(data_.size() < index_ + size)
+          {
+              data_.resize(data_.size() * 2);
+          }
+
+          std::memcpy(&data_[index_], data, size);
+          index_ += size;
+      }
+
+      template <typename T>
+      void save(T const & t)
+      {
+          (*this)(t);
+      }
+
+      std::size_t bytes_written() const
+      {
+          return data_.size();
+      }
+
+      std::size_t flags() const { return 0; }
+
+  private:
+      std::size_t index_;
+      std::vector<char> & data_;
+  };
+
+  class portable_binary_iarchive
+    : public cereal::InputArchive<portable_binary_iarchive, cereal::AllowEmptyClassElision>
+  {
+      typedef
+        cereal::InputArchive<portable_binary_iarchive, cereal::AllowEmptyClassElision>
+        base_type;
+
+  public:
+      portable_binary_iarchive(std::vector<char> & data,
+            boost::uint64_t inbound_data_size, unsigned flags_value = 0)
+        : base_type(this)
+        , index_(0)
+        , data_(data)
+      {}
+
+      portable_binary_iarchive(std::vector<char> & data,
+            std::vector<serialization_chunk> const* chunks,
+            boost::uint64_t inbound_data_size, unsigned flags_value = 0)
+        : base_type(this)
+        , index_(0)
+        , data_(data)
+      {}
+
+      void loadBinary(const void * data, std::size_t size)
+      {
+          if(index_ + size > data_.size())
+          {
+            throw cereal::Exception("Failed ...");
+          }
+          std::memcpy(const_cast<void *>(data), &data_[index_], size);
+          index_ += size;
+      }
+
+      template <typename T>
+      void load(T & t)
+      {
+          (*this)(t);
+      }
+
+      std::size_t bytes_read() const
+      {
+          return index_;
+      }
+
+      std::size_t flags() const { return 0; }
+
+  private:
+      std::size_t index_;
+      std::vector<char> & data_;
+  };
+
+  // ######################################################################
+  // Common BinaryArchive serialization functions
+
+  //! Saving for POD types to binary
+  template<class T> inline
+  typename std::enable_if<
+    std::is_arithmetic<T>::value || boost::serialization::is_bitwise_serializable<T>::value
+  , void>::type
+  save(portable_binary_oarchive & ar, T const & t)
+  {
+    ar.saveBinary(std::addressof(t), sizeof(t));
+  }
+
+  //! Loading for POD types from binary
+  template<class T> inline
+  typename std::enable_if<
+    std::is_arithmetic<T>::value || boost::serialization::is_bitwise_serializable<T>::value
+  , void>::type
+  load(portable_binary_iarchive & ar, T & t)
+  {
+    ar.loadBinary(std::addressof(t), sizeof(t));
+  }
+
+  //! Serializing NVP types to binary
+  template <class Archive, class T> inline
+  CEREAL_ARCHIVE_RESTRICT(portable_binary_iarchive, portable_binary_oarchive)
+  serialize( Archive & ar, cereal::NameValuePair<T> & t )
+  {
+    ar( t.value );
+  }
+
+  //! Serializing SizeTags to binary
+  template <class Archive, class T> inline
+  CEREAL_ARCHIVE_RESTRICT(portable_binary_iarchive, portable_binary_oarchive)
+  serialize( Archive & ar, cereal::SizeTag<T> & t )
+  {
+    ar( t.size );
+  }
+
+  //! Saving binary data
+  template <class T> inline
+  void save(portable_binary_oarchive & ar, cereal::BinaryData<T> const & bd)
+  {
+    ar.saveBinary( bd.data, static_cast<std::size_t>( bd.size ) );
+  }
+
+  //! Loading binary data
+  template <class T> inline
+  void load(portable_binary_iarchive & ar, cereal::BinaryData<T> & bd)
+  {
+    ar.loadBinary(bd.data, static_cast<std::size_t>(bd.size));
+  }
+}}
+
+// register archives for polymorphic support
+CEREAL_REGISTER_ARCHIVE(hpx::util::portable_binary_oarchive)
+CEREAL_REGISTER_ARCHIVE(hpx::util::portable_binary_iarchive)
+
+
+#else
+
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
@@ -610,6 +856,8 @@ namespace boost { namespace archive { namespace detail
 
 #if defined(_MSC_VER)
 #pragma warning( pop )
+#endif
+
 #endif
 
 #endif // PORTABLE_BINARY_OARCHIVE_HPP

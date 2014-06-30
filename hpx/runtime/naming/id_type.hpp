@@ -111,6 +111,9 @@ namespace hpx { namespace naming
         // care, or better, don't use this at all.
         void make_unmanaged() const;
 
+        void save(util::portable_binary_oarchive& ar, const unsigned int version) const;
+        void load(util::portable_binary_iarchive& ar, const unsigned int version);
+
     private:
         friend HPX_API_EXPORT gid_type get_parcel_dest_gid(id_type const& id);
 
@@ -118,10 +121,7 @@ namespace hpx { namespace naming
 
         friend class boost::serialization::access;
 
-        void save(util::portable_binary_oarchive& ar, const unsigned int version) const;
-        void load(util::portable_binary_iarchive& ar, const unsigned int version);
-
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
+        //BOOST_SERIALIZATION_SPLIT_MEMBER()
 
         boost::intrusive_ptr<detail::id_type_impl> gid_;
     };

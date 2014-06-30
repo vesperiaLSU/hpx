@@ -58,6 +58,7 @@ namespace hpx { namespace util
     private:
         // serialization support
         friend class boost::serialization::access;
+        friend class cereal::access;
 
         HPX_EXPORT void serialize(hpx::util::portable_binary_oarchive& ar,
             const unsigned int);
@@ -139,6 +140,7 @@ namespace hpx { namespace util
 
         /// support functions needed for a forward iterator
         friend class boost::iterator_core_access;
+        friend class cereal::access;
 
         void increment()
         {

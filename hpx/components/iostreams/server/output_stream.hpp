@@ -17,6 +17,8 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/split_member.hpp>
 
+#include <cereal/types/memory.hpp>
+
 // TODO: Error handling?
 
 namespace hpx { namespace iostreams { namespace detail
@@ -70,7 +72,7 @@ namespace hpx { namespace iostreams { namespace detail
             typename mutex_type::scoped_lock l(mtx_);
             if (data_.get() && !data_->empty())
             {
-                boost::shared_ptr<std::vector<char> > data(data_);
+                std::shared_ptr<std::vector<char> > data(data_);
                 data_.reset();
                 l.unlock();
 
@@ -80,17 +82,18 @@ namespace hpx { namespace iostreams { namespace detail
         }
 
     private:
-        boost::shared_ptr<std::vector<char> > data_;
+        std::shared_ptr<std::vector<char> > data_;
 
     private:
         friend class boost::serialization::access;
+          friend class cereal::access;
 
         HPX_COMPONENT_EXPORT void save(
             hpx::util::portable_binary_oarchive& ar, unsigned) const;
         HPX_COMPONENT_EXPORT void load(
             hpx::util::portable_binary_iarchive& ar, unsigned);
 
-        BOOST_SERIALIZATION_SPLIT_MEMBER();
+        //BOOST_SERIALIZATION_SPLIT_MEMBER();
 
         mutable mutex_type mtx_;
     };

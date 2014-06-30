@@ -771,7 +771,7 @@ std::string section::expand_only(std::string value,
 template <typename Archive>
 void section::save(Archive& ar, const unsigned int version) const
 {
-    using namespace boost::serialization;
+    using namespace cereal;
 
     ar << make_nvp("name", name_);
     ar << make_nvp("parent_name", parent_name_);
@@ -782,7 +782,7 @@ void section::save(Archive& ar, const unsigned int version) const
 template <typename Archive>
 void section::load(Archive& ar, const unsigned int version)
 {
-    using namespace boost::serialization;
+    using namespace cereal;
 
     ar >> make_nvp("name", name_);
     ar >> make_nvp("parent_name", parent_name_);

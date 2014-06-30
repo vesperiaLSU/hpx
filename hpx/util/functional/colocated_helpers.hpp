@@ -38,6 +38,10 @@ namespace hpx { namespace util { namespace functional
             }
             return naming::get_id_from_locality_id(rep.get_locality_id());
         }
+
+        template <typename Archive>
+        BOOST_FORCEINLINE void serialize(Archive& ar, unsigned int const)
+        {}
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -77,6 +81,7 @@ namespace hpx { namespace util { namespace functional
         private:
             // serialization support
             friend class boost::serialization::access;
+            friend class cereal::access;
 
             template <typename Archive>
             BOOST_FORCEINLINE void serialize(Archive& ar, unsigned int const)
@@ -133,6 +138,7 @@ namespace hpx { namespace util { namespace functional
         private:
             // serialization support
             friend class boost::serialization::access;
+            friend class cereal::access;
 
             template <typename Archive>
             BOOST_FORCEINLINE void serialize(Archive& ar, unsigned int const)

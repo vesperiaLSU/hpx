@@ -361,7 +361,7 @@ namespace hpx { namespace naming
         // serialization
         void id_type_impl::save(util::portable_binary_oarchive& ar) const
         {
-            boost::uint32_t dest_locality_id = ar.get_dest_locality_id();
+            boost::uint32_t dest_locality_id = 0;//ar.get_dest_locality_id();
 
             id_type_management type = type_;
             if (managed_move_credit == type)

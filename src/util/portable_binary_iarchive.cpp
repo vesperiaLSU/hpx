@@ -9,6 +9,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#if 0
 #include <hpx/config.hpp>
 #include <boost/version.hpp>
 #include <boost/config.hpp>
@@ -232,5 +233,7 @@ namespace hpx { namespace util
         hpx::util::portable_binary_iarchive
     >;
 }}
+
+#endif
 
 #endif // BOOST_VERSION >= 103700

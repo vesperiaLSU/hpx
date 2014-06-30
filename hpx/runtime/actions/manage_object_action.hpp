@@ -59,15 +59,17 @@ namespace hpx { namespace actions
             oarchive_type& ar, const unsigned int,
             boost::uint8_t const*)
         {
-            using boost::serialization::make_array;
-            ar << make_array(data, size);
+            //using boost::serialization::make_array;
+            //ar << make_array(data, size);
+            ar(cereal::binary_data(const_cast<boost::uint8_t*>(data), size));
         }
         static void load_(boost::uint8_t* data, std::size_t size,
             iarchive_type& ar, const unsigned int,
             boost::uint8_t const*)
         {
-            using boost::serialization::make_array;
-            ar >> make_array(data, size);
+            //using boost::serialization::make_array;
+            //ar >> make_array(data, size);
+            ar(cereal::binary_data(data, size));
         }
 
     public:
@@ -109,6 +111,7 @@ namespace hpx { namespace actions
     private:
         // serialization support, just serialize the type
         friend class boost::serialization::access;
+        friend class cereal::access;
 
         template<class Archive>
         void serialize(Archive&, const unsigned int) {}
@@ -208,6 +211,7 @@ namespace hpx { namespace actions
     private:
         // serialization support, just serialize the type
         friend class boost::serialization::access;
+        friend class cereal::access;
 
         template<class Archive>
         void serialize(Archive& ar, const unsigned int)
@@ -231,6 +235,7 @@ namespace hpx { namespace actions
     private:
         // serialization support, just serialize the type
         friend class boost::serialization::access;
+        friend class cereal::access;
 
         template<class Archive>
         void serialize(Archive& ar, const unsigned int)
@@ -310,6 +315,7 @@ namespace hpx { namespace actions
     private:
         // serialization support, just serialize the type
         friend class boost::serialization::access;
+        friend class cereal::access;
 
         template<class Archive>
         void serialize(Archive& ar, const unsigned int)

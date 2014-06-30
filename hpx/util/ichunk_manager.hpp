@@ -8,6 +8,8 @@
 
 #include <hpx/util/binary_filter.hpp>
 
+#include <boost/archive/archive_exception.hpp>
+
 #include <cstddef> // for size_t
 #include <cstring> // for memcpy
 #include <vector>
