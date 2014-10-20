@@ -35,16 +35,17 @@ namespace hpx { namespace parallel { HPX_INLINE_NAMESPACE(v1)
         /// \cond NOINTERNAL
         template <typename Iter>
         struct count
-          : public detail::algorithm<
+          : public detail::algorithm<                   //what this algorithm<> does?
                 count<Iter>,
                 typename std::iterator_traits<Iter>::difference_type
             >
         {
+            
             typedef typename std::iterator_traits<Iter>::difference_type
                 difference_type;
 
             count()
-              : count::algorithm("count")
+              : count::algorithm("count")                //where is this algorithm() from?
             {}
 
             template <typename ExPolicy, typename T>
@@ -55,7 +56,7 @@ namespace hpx { namespace parallel { HPX_INLINE_NAMESPACE(v1)
             }
 
             template <typename ExPolicy, typename T>
-            static typename detail::algorithm_result<ExPolicy, difference_type>::type
+            static typename detail::algorithm_result<ExPolicy, difference_type>::type    
             parallel(ExPolicy const& policy, Iter first, Iter last,
                 T const& value)
             {
